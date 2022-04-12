@@ -1,0 +1,16 @@
+Change Log
+==============
+
+
+1.0.0 (12/4/2022)
+------------------
+- First Release
+
+1.0.1 (12/4/2022)
+------------------
+- Bug fix for complex nested json
+- Bug fix if key have a null value
+
+1.0.2 (12/4/2022)
+------------------
+- Updated doc string details
