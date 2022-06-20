@@ -14,3 +14,7 @@ Change Log
 1.0.2 (12/4/2022)
 ------------------
 - Updated doc string details
+
+1.0.3 (20/6/2022)
+------------------
+- Bug fix if the parent and child node have same key name
