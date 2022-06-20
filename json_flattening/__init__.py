@@ -71,10 +71,10 @@ def json_flatten(json_data,list_split_to_many=False,ignore_parent_key=None):
                                                 cols + '_'),
                                             how='left', on='temp_index')
                                     else:
-                                        drill_down_df = temp_df[~temp_df[cols].isna()].reset_index().join(
+                                        drill_down_df = temp_df[~temp_df[cols].isna()].reset_index().drop(cols, axis=1).join(
                                             pd.DataFrame(temp_df.loc[~temp_df[cols].isna(), cols].to_list())).set_index('index')
                                         final_master = final_master.join(
-                                            drill_down_df[list(set(drill_down_df.columns) - set(temp_df.columns))].add_prefix(
+                                            drill_down_df[list(set(drill_down_df.columns) - set(temp_df.drop(cols, axis=1).columns))].add_prefix(
                                                 cols + '_'),
                                             how='left')
                                         final_master['temp_index'] = final_master.reset_index().index
