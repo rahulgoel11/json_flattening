@@ -18,3 +18,11 @@ Change Log
 1.0.3 (20/6/2022)
 ------------------
 - Bug fix if the parent and child node have same key name
+
+1.0.4 (15/7/2022)
+------------------
+- Bug fix if the column name is "id" it was skipping it
+
+1.0.5 (18/7/2022)
+------------------
+- Added Parameter to consider and filter parent keys and ignore rest

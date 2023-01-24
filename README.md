@@ -15,6 +15,7 @@ pip install json-flattening
 json_data: Input data to be flattend, should be dict or list of dict
 list_split_to_many: If the final node list data should be splitted to one to many relation(i.e to multiple rows)
 ignore_parent_key: Parent Keys to be ignored should be string or list
+filter_parent_key: Parent Keys only to be considered should be string or list,if none of key specified is in data,will return empty dataframe
 ```
 
 
@@ -72,5 +73,3 @@ flatten_data = json_flatten(data,ignore_parent_key=['phoneNumbers','age'])
 |Rack|Jackon|man|CA|126|394221|San Jone|
 |rock|Jackon|man|NaN|126|394221|San Jone|
 
-
-*Disclaimer : For some heavily complex nested json which has combination of both sub json and other type like integer and string the relation may not work properly Do check your data for complex nested if realtions are proper. But for simple nested works perfect*
