@@ -3,20 +3,28 @@
 
 import pandas as pd
 
-def json_flatten(json_data,list_split_to_many=False,ignore_parent_key=None):
+def json_flatten(json_data,list_split_to_many=False,ignore_parent_key=None,filter_parent_key=None):
     '''
     To flatten the Json data in relational format
     :param json_data: Input data to be flattend, should be dict or list of dict
     :param list_split_to_many: If the final node list data should be splitted to one to many relation
     :param ignore_parent_key: Parent Keys to be ignored should be string or list
+    :param filter_parent_key: Parent Keys only to be considered should be string or list,if none of key specified is in data,will return empty dataframe
     :return: returns Dataframe of flattend json
     '''
     if type(json_data) == dict:
         json_data = [json_data]
-    
+
     if type(json_data) == list and len(json_data) > 0:
         if type(json_data[0]) == dict:
             id_df = pd.DataFrame(json_data).reset_index().rename(columns={"index": "id_col"})
+
+            if filter_parent_key != None:
+                if type(filter_parent_key) != list:
+                    filter_parent_key = [filter_parent_key]
+                filtered_cols = list(set(id_df.columns.to_list()) & set(filter_parent_key))
+                id_df = id_df[['id_col'] + filtered_cols]
+
             if ignore_parent_key != None:
                 if type(ignore_parent_key) != list:
                     ignore_parent_key = [ignore_parent_key]
@@ -31,7 +39,7 @@ def json_flatten(json_data,list_split_to_many=False,ignore_parent_key=None):
 
                 while check:
 
-                    if any(col_name + '_' in srchstr for srchstr in final_master.columns):
+                    if any(col_name + '_' in srchstr for srchstr in final_master.drop('id_col',axis=1).columns):
                         master_flag = True
                         col_name_master = [col for col in final_master.columns if col_name + '_' in col]
 
@@ -54,7 +62,7 @@ def json_flatten(json_data,list_split_to_many=False,ignore_parent_key=None):
                             temp_df = temp_df_master[['id_col','temp_index',cols]]
                         if temp_df[cols].dropna().shape[0] > 0:
                             if type(temp_df[cols].dropna().reset_index(drop=True).iloc[0]) == list:
-                                if max(temp_df[cols].str.len()) <= 1:
+                                if max(temp_df[cols].dropna().str.len()) <= 1:
                                     temp_df[cols] = temp_df[cols].explode()
                                 else:
                                     explode_temp = temp_df[cols].explode().to_frame()
